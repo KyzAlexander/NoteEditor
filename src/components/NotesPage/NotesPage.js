@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Note from "./Note";
-import AddNotesForm from "./AddNotesForm";
+import Note from "../Note/Note";
+import AddNotesForm from "../AddNotesForm/AddNotesForm";
 
 const NotesPage = () => {
   const [notes, setNotes] = useState([]);
@@ -10,10 +10,19 @@ const NotesPage = () => {
       const newItem = {
         id: Math.random() * 10,
         task: userInput,
-        // complete: false,
       };
       setNotes([...notes, newItem]);
     }
+  };
+
+  const onChangeTags = (id, data) => {
+    const updateNotes = notes.map((note) => {
+      if (id === note.id) {
+        return { id, task: data };
+      }
+      return note;
+    });
+    setNotes(updateNotes);
   };
 
   const removeNote = (id) => {
@@ -47,6 +56,7 @@ const NotesPage = () => {
             key={note.id}
             // toggleTask={handleToggle}
             removeNote={removeNote}
+            onChange={onChangeTags}
           />
         );
       })}

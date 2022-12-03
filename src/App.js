@@ -1,4 +1,4 @@
-import NotesPage from "./components/NotesPage";
+import NotesPage from "./components/NotesPage/NotesPage";
 
 function App() {
   return (

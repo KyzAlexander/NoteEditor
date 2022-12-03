@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-const Note = ({ note, toggleTask, removeNote }) => {
+const Note = ({ note, toggleTask, removeNote, onChange }) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [correctNote, setCorrectNote] = useState(note.task);
   //---------
-  const [correctTags, setCorrectTags] = useState("");
+  // const [correctTags, setCorrectTags] = useState("");
   //----------
-  const regexp = /#(.*?)[\s|#]/gi;
+  const regexp = /\B(#[a-zA-Z0-9]+\b)(?!;)/gi;
 
-  const [tags, setTags] = useState(correctNote.match(regexp));
-  const removeTag = () => {
-    setTags([...tags.filter((tag, i) => tag[i] !== i)]); // !!не идет удаление тэга
+  const [tags, setTags] = useState(note.task.match(regexp));
+  const removeTag = (tagToRemove) => {
+    setTags([...tags.filter((tag) => tag !== tagToRemove)]);
   };
 
   const editTitleInputRef = useRef(null); // используется чтобы сделать фокус в конце предложения
@@ -18,6 +18,11 @@ const Note = ({ note, toggleTask, removeNote }) => {
       editTitleInputRef?.current?.focus();
     }
   }, [isEditMode]);
+
+  const onSave = () => {
+    onChange(note.id, correctNote);
+    setIsEditMode(false);
+  };
 
   return (
     <div key={note.id} className="itemNote">
@@ -37,17 +42,18 @@ const Note = ({ note, toggleTask, removeNote }) => {
               }}
             ></input>
             {tags?.map((tag) => (
-              <input
+              <p
                 className="tags"
-                value={tag}
-                onChange={(e) => setCorrectTags(e.target.value)} // !!!не редактируются тэги
+                // onChange={(e) => setCorrectTags(e.target.value)} // !!!не редактируются тэги
                 // onKeyDown={(e) => {
                 //   if (e.key === "Enter") {
                 //     tag = correctTags;
                 //     setIsEditMode(false);
                 //   }
                 // }}
-              ></input>
+              >
+                {tag}
+              </p>
             ))}
           </>
         ) : (
@@ -57,7 +63,7 @@ const Note = ({ note, toggleTask, removeNote }) => {
             {tags?.map((tag) => (
               <>
                 <p>{tag}</p>
-                <button onClick={() => removeTag()}>del Tag</button>
+                <button onClick={() => removeTag(tag)}>del Tag</button>
               </>
             ))}
           </>
@@ -67,20 +73,8 @@ const Note = ({ note, toggleTask, removeNote }) => {
         <button className="btnDelete" onClick={() => removeNote(note.id)}>
           delete
         </button>
-        {/* <div
-          className='btnActiveOrCompleted ml-5 cursor-pointer hover:scale-150 duration-200'
-          onClick={() => toggleTask(todo.id)}
-        >
-          {todo.complete ? <BtnCompleted /> : <BtnActive />}
-        </div> */}
         {isEditMode ? (
-          <button
-            className="btnEdited"
-            onClick={() => {
-              note.task = correctNote;
-              setIsEditMode(false);
-            }}
-          >
+          <button className="btnEdited" onClick={onSave}>
             отредакторованно
           </button>
         ) : (
