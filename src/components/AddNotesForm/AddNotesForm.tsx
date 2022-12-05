@@ -1,19 +1,25 @@
+import React from "react";
 import { useState } from "react";
 
-const AddNotesForm = ({ addNote }) => {
-  const [userInput, setUserInput] = useState("");
+import { hashtagRegexp } from "../../helpers/constants";
+import { IAddNotesFormProps } from "./interfaces";
 
-  const handleChange = (e) => {
-    setUserInput(e.currentTarget.value);
+const AddNotesForm: React.FC<IAddNotesFormProps> = ({ addNote }) => {
+  const [value, setValue] = useState("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault(); //отмена действия браузера
-    addNote(userInput);
-    setUserInput("");
+
+    const hashtags = value.match(hashtagRegexp) || [];
+    addNote(value, hashtags);
+    setValue("");
   };
 
-  const handleKeyPress = (e) => {
+  const handleKeyPress = (e: any) => {
     // обрабатывает нажатие на Enter
     if (e.key === "Enter") {
       handleSubmit(e);
@@ -23,7 +29,7 @@ const AddNotesForm = ({ addNote }) => {
     <form className="addNotesForm" onSubmit={handleSubmit}>
       <input
         className="noteAdd"
-        value={userInput}
+        value={value}
         onChange={handleChange}
         onKeyDown={handleKeyPress}
         placeholder="Enter a task ..."
