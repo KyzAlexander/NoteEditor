@@ -6,12 +6,16 @@ import AddNotesForm from "../AddNotesForm/AddNotesForm";
 
 const NotesPage = () => {
   const [notes, setNotes] = useState(
-    JSON.parse(localStorage.getItem("notes")) || []
-    //-----------localStorage.getItem("notes") - Аргумент типа "string | null" нельзя назначить параметру типа "string".
-    //-----------Тип "null" не может быть назначен для типа "string".
+    JSON.parse(localStorage.getItem("notes") as string) || []
   );
 
-  const addNote = (task: string, hashtags: string) => {
+  type Note = {
+    id: number;
+    task: string;
+    hashtags: Array<string>;
+  };
+
+  const addNote = (task: string, hashtags: Array<string>) => {
     if (task) {
       const newItem = {
         id: uuidv4(),
@@ -24,8 +28,8 @@ const NotesPage = () => {
     }
   };
 
-  const editNote = (id: number, value: string, hashtags: string) => {
-    const updatedNotes = notes.map((note) => {
+  const editNote = (id: number, value: string, hashtags: Array<string>) => {
+    const updatedNotes = notes.map((note: Note) => {
       if (id === note.id) {
         return {
           id,
@@ -41,29 +45,44 @@ const NotesPage = () => {
   };
 
   const removeNote = (id: number) => {
-    const updatedNotes = notes.filter((note) => note.id !== id);
+    const updatedNotes = notes.filter((note: Note) => note.id !== id);
 
     setNotes(updatedNotes);
     localStorage.setItem("notes", JSON.stringify(updatedNotes));
   };
 
+  const onChangeFilter = (id: number) => {
+    if (id === 0) {
+      return notes;
+    } else {
+      const updatedNotes = notes.filter((note: Note) => note.id === id);
+      return updatedNotes;
+      // setNotes(updatedNotes);
+      // localStorage.setItem("notes", JSON.stringify(updatedNotes));
+    }
+  };
+
+  console.log(notes);
   return (
     <div className="notesPage">
+      <select onChange={(e) => onChangeFilter(e.target.value)}>
+        <option value={0}>all</option>
+        {notes.map((note: Note) => {
+          if (note.hashtags.length !== 0) {
+            return <option value={note.id}>{note.hashtags}</option>;
+          } else return null;
+        })}
+      </select>
+
       <h1 className="title">Notes List: {notes.length}</h1>
       <AddNotesForm addNote={addNote} />
-      {/*  addNote  -- Тип "(task: string, hashtags: string) => void" не может быть назначен для типа "(value: string, hashtags: string[]) => void".
-  Типы параметров "hashtags" и "hashtags" несовместимы.
-    Тип "string[]" не может быть назначен для типа "string". */}
-      {notes.map((note) => {
+      {notes.map((note: Note) => {
         return (
           <Note
             note={note}
             key={note.id}
             removeNote={removeNote}
             onChange={editNote}
-            //     onChange --  Тип "(id: number, value: string, hashtags: string) => void" не может быть назначен для типа "(id: number, correctNote: string, hashtags: string[]) => void".
-            // Типы параметров "hashtags" и "hashtags" несовместимы.
-            //   Тип "string[]" не может быть назначен для типа "string".
           />
         );
       })}

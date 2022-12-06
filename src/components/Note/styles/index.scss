@@ -1,4 +1,37 @@
 .tag {
+  margin-left: 5px;
   display: flex;
-  flex-direction: row;
+  flex-direction: row;  
 }
+.itemNote {
+  margin-top: 15px;
+  width: 100%;
+  box-shadow: 5px -5px 10px rgb(233, 189, 189);  
+  background-color:  rgb(221, 215, 215);
+
+  .editNote {
+    border: 1px solid rgb(245, 129, 129) ;
+  }
+  .noteAndTags {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    &__note {
+      padding-bottom: 5px;
+      border-bottom: 1px solid rgb(209, 155, 155);
+    }
+    &__tags {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;      
+    }
+  }
+  .wrapperBtn {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: auto;
+  }
+  
+}
+

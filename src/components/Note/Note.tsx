@@ -5,7 +5,7 @@ import { hashtagRegexp } from "../../helpers/constants";
 import { INoteProps } from "./interfaces";
 
 const Note: React.FC<INoteProps> = ({ note, removeNote, onChange }) => {
-  const editTitleInputRef = useRef(null); // используется чтобы сделать фокус в конце предложения
+  const editTitleInputRef = useRef<HTMLInputElement>(null); // используется чтобы сделать фокус в конце предложения
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [correctNote, setCorrectNote] = useState(note.task);
@@ -16,7 +16,7 @@ const Note: React.FC<INoteProps> = ({ note, removeNote, onChange }) => {
 
   useEffect(() => {
     if (isEditMode) {
-      editTitleInputRef?.current?.focus(); //Свойство "focus" не существует в типе "never"
+      editTitleInputRef?.current?.focus();
     }
   }, [isEditMode]);
 
@@ -30,7 +30,6 @@ const Note: React.FC<INoteProps> = ({ note, removeNote, onChange }) => {
   const onDeleteHashtag = (tagToRemove: string) => {
     const udpatedNote = note.task.replace(tagToRemove, "");
     const updatedHashtags = note.hashtags.filter(
-      //------------------------------------------Свойство "filter" не существует в типе "string".
       (hashtag: string) => hashtag !== tagToRemove
     );
 
@@ -39,7 +38,6 @@ const Note: React.FC<INoteProps> = ({ note, removeNote, onChange }) => {
 
   const renderHashtags = () => {
     return note.hashtags.map((hashtag: string) => {
-      //--------------------------------------------Свойство "map" не существует в типе "string"
       return (
         <div className="tag">
           <p>{hashtag}</p>
@@ -68,23 +66,28 @@ const Note: React.FC<INoteProps> = ({ note, removeNote, onChange }) => {
             />
           </>
         ) : (
-          <>
-            {note.task}
-            <p>-------------------------</p>
-            {renderHashtags()}
-          </>
+          <div className="noteAndTags">
+            <p className="noteAndTags__note">{note.task}</p>
+            <div className="noteAndTags__tags">{renderHashtags()}</div>
+          </div>
         )}
       </div>
       <div className="wrapperBtn">
-        <button className="btnDelete" onClick={() => removeNote(note.id)}>
+        <button
+          className="wrapperBtn__btnDelete"
+          onClick={() => removeNote(note.id)}
+        >
           delete
         </button>
         {isEditMode ? (
-          <button className="btnEdited" onClick={onSave}>
+          <button className="wrapperBtn__btnEdited" onClick={onSave}>
             confirm
           </button>
         ) : (
-          <button className="BtnEdit" onClick={() => setIsEditMode(true)}>
+          <button
+            className="wrapperBtn__BtnEdit"
+            onClick={() => setIsEditMode(true)}
+          >
             edit
           </button>
         )}
