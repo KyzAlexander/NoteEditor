@@ -1,11 +1,17 @@
 import React from "react";
 import { useEffect, useRef, useState } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CreateIcon from "@mui/icons-material/Create";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ClearIcon from "@mui/icons-material/Clear";
+
+import Tooltip from "@mui/material/Tooltip";
 
 import { hashtagRegexp } from "../../helpers/constants";
 import { INoteProps } from "./interfaces";
 
 const Note: React.FC<INoteProps> = ({ note, removeNote, onChange }) => {
-  const editTitleInputRef = useRef<HTMLInputElement>(null); // используется чтобы сделать фокус в конце предложения
+  const editTitleInputRef = useRef<HTMLInputElement>(null);
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [correctNote, setCorrectNote] = useState(note.task);
@@ -40,8 +46,12 @@ const Note: React.FC<INoteProps> = ({ note, removeNote, onChange }) => {
     return note.hashtags.map((hashtag: string) => {
       return (
         <div className="tag">
-          <p>{hashtag}</p>
-          <button onClick={() => onDeleteHashtag(hashtag)}>del Tag</button>
+          <p className="title">{hashtag}</p>
+          <ClearIcon
+            onClick={() => onDeleteHashtag(hashtag)}
+            sx={{ color: "#00ff89", cursor: "pointer" }}
+            fontSize="small"
+          />
         </div>
       );
     });
@@ -49,7 +59,7 @@ const Note: React.FC<INoteProps> = ({ note, removeNote, onChange }) => {
 
   return (
     <div key={note.id} className="itemNote">
-      <div>
+      <div className="wrapperNote">
         {isEditMode ? (
           <>
             <input
@@ -59,8 +69,7 @@ const Note: React.FC<INoteProps> = ({ note, removeNote, onChange }) => {
               onChange={(e) => setCorrectNote(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  note.task = correctNote;
-                  setIsEditMode(false);
+                  onSave();
                 }
               }}
             />
@@ -73,23 +82,28 @@ const Note: React.FC<INoteProps> = ({ note, removeNote, onChange }) => {
         )}
       </div>
       <div className="wrapperBtn">
-        <button
+        <DeleteIcon
           className="wrapperBtn__btnDelete"
           onClick={() => removeNote(note.id)}
-        >
-          delete
-        </button>
+          sx={{ color: "#00ff89", cursor: "pointer" }}
+        />
         {isEditMode ? (
-          <button className="wrapperBtn__btnEdited" onClick={onSave}>
-            confirm
-          </button>
+          <CheckCircleIcon
+            className="wrapperBtn__btnConfirm"
+            onClick={onSave}
+            sx={{ color: "#00ff89", cursor: "pointer", ml: "5px" }}
+          />
         ) : (
-          <button
-            className="wrapperBtn__BtnEdit"
-            onClick={() => setIsEditMode(true)}
+          <Tooltip
+            title="To add a tag, put a space and start writing with the symbol # (#tag)"
+            placement="right-start"
           >
-            edit
-          </button>
+            <CreateIcon
+              className="wrapperBtn__BtnEdit"
+              onClick={() => setIsEditMode(true)}
+              sx={{ color: "#00ff89", cursor: "pointer", ml: "5px" }}
+            />
+          </Tooltip>
         )}
       </div>
     </div>

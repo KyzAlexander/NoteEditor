@@ -12,7 +12,7 @@ const AddNotesForm: React.FC<IAddNotesFormProps> = ({ addNote }) => {
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault(); //отмена действия браузера
+    e.preventDefault();
 
     const hashtags = value.match(hashtagRegexp) || [];
     addNote(value, hashtags);
@@ -20,7 +20,6 @@ const AddNotesForm: React.FC<IAddNotesFormProps> = ({ addNote }) => {
   };
 
   const handleKeyPress = (e: any) => {
-    // обрабатывает нажатие на Enter
     if (e.key === "Enter") {
       handleSubmit(e);
     }
@@ -32,7 +31,7 @@ const AddNotesForm: React.FC<IAddNotesFormProps> = ({ addNote }) => {
         value={value}
         onChange={handleChange}
         onKeyDown={handleKeyPress}
-        placeholder="Enter a task ..."
+        placeholder="Enter a note ..."
       ></input>
       <button className="btnSave">Save</button>
     </form>

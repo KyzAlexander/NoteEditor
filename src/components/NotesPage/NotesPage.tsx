@@ -8,6 +8,7 @@ const NotesPage = () => {
   const [notes, setNotes] = useState(
     JSON.parse(localStorage.getItem("notes") as string) || []
   );
+  const [selectedFilter, setSelectedFilter] = useState("all");
 
   type Note = {
     id: number;
@@ -51,41 +52,49 @@ const NotesPage = () => {
     localStorage.setItem("notes", JSON.stringify(updatedNotes));
   };
 
-  const onChangeFilter = (id: number) => {
-    if (id === 0) {
-      return notes;
-    } else {
-      const updatedNotes = notes.filter((note: Note) => note.id === id);
-      return updatedNotes;
-      // setNotes(updatedNotes);
-      // localStorage.setItem("notes", JSON.stringify(updatedNotes));
-    }
+  const onChangeFilter = (hashtag: string) => {
+    setSelectedFilter(hashtag);
   };
 
-  console.log(notes);
+  const renderFilterOptions = () => {
+    const availableFilters: any = new Set([]);
+    notes.forEach((note: Note) => {
+      note.hashtags.forEach((hashtag) => {
+        availableFilters.add(hashtag);
+      });
+    });
+
+    return Array.from(availableFilters).map((filter: any) => (
+      <option value={filter}>{filter}</option>
+    ));
+  };
+
   return (
     <div className="notesPage">
-      <select onChange={(e) => onChangeFilter(e.target.value)}>
-        <option value={0}>all</option>
-        {notes.map((note: Note) => {
-          if (note.hashtags.length !== 0) {
-            return <option value={note.id}>{note.hashtags}</option>;
-          } else return null;
-        })}
-      </select>
-
       <h1 className="title">Notes List: {notes.length}</h1>
       <AddNotesForm addNote={addNote} />
-      {notes.map((note: Note) => {
-        return (
-          <Note
-            note={note}
-            key={note.id}
-            removeNote={removeNote}
-            onChange={editNote}
-          />
-        );
-      })}
+      <select
+        className="filterTags"
+        onChange={(e) => onChangeFilter(e.target.value)}
+      >
+        <option value={"all"}>all</option>
+        {renderFilterOptions()}
+      </select>
+      {notes
+        .filter(
+          (note: Note) =>
+            selectedFilter === "all" || note.hashtags.includes(selectedFilter)
+        )
+        .map((note: Note) => {
+          return (
+            <Note
+              note={note}
+              key={note.id}
+              removeNote={removeNote}
+              onChange={editNote}
+            />
+          );
+        })}
     </div>
   );
 };

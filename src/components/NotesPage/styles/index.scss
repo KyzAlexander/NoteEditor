@@ -1,5 +1,13 @@
 .notesPage {
   display: flex;
   flex-direction: column;
-  align-items: center;  
+  align-items: center;
+  .title {
+    color: #fff;
+  } 
+  .filterTags {
+    margin-top: 10px;
+    width: 100px;
+    border-radius: 5px;
+  }
 }

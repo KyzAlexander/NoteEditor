@@ -1,37 +1,61 @@
 .tag {
-  margin-left: 5px;
+  margin-left: 7px;
   display: flex;
-  flex-direction: row;  
+  flex-direction: row; 
+  align-items: center; 
+  background-color: #fff;
+  border-radius: 15px;
+  .title {
+    margin: 0;
+    color: rgb(5, 97, 33);
+    padding: 3px;    
+  }
 }
 .itemNote {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 15px;
+  padding: 10px;
   width: 100%;
-  box-shadow: 5px -5px 10px rgb(233, 189, 189);  
-  background-color:  rgb(221, 215, 215);
+  border-radius: 5px;
+  background-color:  #555;
 
-  .editNote {
-    border: 1px solid rgb(245, 129, 129) ;
+  .wrapperNote {
+    width: 100%;
+    max-width: 700px;
   }
-  .noteAndTags {
+  .editNote {
+    width: 100%;    
+    border: 1px solid rgb(245, 129, 129);
+    border-radius: 5px;    
+  }
+  .noteAndTags {   
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    background-color: #555;
+    color: #fff;
     &__note {
+      width: 100%;
       padding-bottom: 5px;
-      border-bottom: 1px solid rgb(209, 155, 155);
+      border-bottom: 1px solid #00ff89;
+      font-size: larger; 
+      word-break: break-all;    
     }
     &__tags {
+      width: 100%;
       display: flex;
       flex-direction: row;
-      justify-content: flex-start;      
+      justify-content: flex-start;          
     }
   }
   .wrapperBtn {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-left: auto;
-  }
-  
+    flex-direction: row;    
+    align-items: center; 
+    margin-left: 3px;     
+  }  
 }
 
