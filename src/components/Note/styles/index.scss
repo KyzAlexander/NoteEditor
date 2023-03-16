@@ -25,11 +25,24 @@
   .wrapperNote {
     width: 100%;
     max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  .currentDate {    
+    margin-left: auto;
+    margin-bottom: 5px;
+    font-size: 11px;
+    font-style: italic;
+    color: #fff;
+  }
+  .wrapperEditNote {
+    padding: 10px;
   }
   .editNote {
     width: 100%;    
     border: 1px solid rgb(245, 129, 129);
-    border-radius: 5px;    
+    border-radius: 5px;        
   }
   .noteAndTags {   
     display: flex;

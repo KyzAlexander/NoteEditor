@@ -29,7 +29,7 @@ const Note: React.FC<INoteProps> = ({ note, removeNote, onChange }) => {
   const onSave = () => {
     const hashtags = correctNote.match(hashtagRegexp) || [];
 
-    onChange(note.id, correctNote, hashtags);
+    onChange(note.id, correctNote, hashtags, note.date);
     setIsEditMode(false);
   };
 
@@ -39,7 +39,7 @@ const Note: React.FC<INoteProps> = ({ note, removeNote, onChange }) => {
       (hashtag: string) => hashtag !== tagToRemove
     );
 
-    onChange(note.id, udpatedNote, updatedHashtags);
+    onChange(note.id, udpatedNote, updatedHashtags, note.date);
   };
 
   const renderHashtags = () => {
@@ -60,8 +60,9 @@ const Note: React.FC<INoteProps> = ({ note, removeNote, onChange }) => {
   return (
     <div key={note.id} className="itemNote">
       <div className="wrapperNote">
+        <span className="currentDate">{note.date}</span>
         {isEditMode ? (
-          <>
+          <div className="wrapperEditNote">
             <input
               className="editNote"
               value={correctNote}
@@ -73,7 +74,7 @@ const Note: React.FC<INoteProps> = ({ note, removeNote, onChange }) => {
                 }
               }}
             />
-          </>
+          </div>
         ) : (
           <div className="noteAndTags">
             <p className="noteAndTags__note">{note.task}</p>

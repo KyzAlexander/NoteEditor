@@ -14,6 +14,7 @@ const NotesPage = () => {
     id: number;
     task: string;
     hashtags: Array<string>;
+    date: string;
   };
 
   const addNote = (task: string, hashtags: Array<string>) => {
@@ -22,6 +23,7 @@ const NotesPage = () => {
         id: uuidv4(),
         task,
         hashtags,
+        date: new Date().toLocaleDateString("ru-RU"),
       };
 
       setNotes([...notes, newItem]);
@@ -29,13 +31,19 @@ const NotesPage = () => {
     }
   };
 
-  const editNote = (id: number, value: string, hashtags: Array<string>) => {
+  const editNote = (
+    id: number,
+    value: string,
+    hashtags: Array<string>,
+    date: string
+  ) => {
     const updatedNotes = notes.map((note: Note) => {
       if (id === note.id) {
         return {
           id,
           task: value,
           hashtags,
+          date,
         };
       }
       return note;
